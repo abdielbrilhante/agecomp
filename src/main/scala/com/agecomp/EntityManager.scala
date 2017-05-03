@@ -1,4 +1,6 @@
 package com.agecomp
 
-class EntityManager(val components: HashMap[String, HashMap[Int, Component]) {
+import scala.collection.mutable.HashMap
+
+class EntityManager(val components: HashMap[String, ComponentMap]) {
 }
