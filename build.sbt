@@ -10,6 +10,7 @@ lazy val root = (project in file(".")).
     name := "Hello",
     libraryDependencies ++= Seq(
       scalaTest % Test,
-      "org.scala-lang" % "scala-reflect" % "2.12.1"
+      "org.scala-lang" % "scala-reflect" % "2.12.1",
+      "com.typesafe.akka" %% "akka-actor" % "2.5.1"
     )
   )
