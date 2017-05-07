@@ -4,25 +4,28 @@ import scala.collection.mutable.HashMap
 
 class EntityManager() {
   val components = new HashMap[String, ComponentMap]
-  private var _id: Int = 0
 
-  // TODO: Better uid generation
-  def uid: Int = { _id += 1; _id }
+  def addComponent(id: Int, component: Component) = {
+    val className = component.getClass.getName
 
-  // TODO: Check if component already exists
-  def addComponent(id: Int, name: String, params: AnyRef) = {
-    if (!components.contains(name)) {
-      components.put(name, new ComponentMap())
+    if (!components.contains(className)) {
+      components.put(className, new ComponentMap())
     }
 
-    val component = instance[Component](name, Int.box(id), params)
-    components(name).put(id, component)
+    val container = components(className)
+    component.id = id
+
+    if (!container.contains(id)) {
+      container.put(id, component)
+    }
   }
 
-  def addEntity(blueprint: List[(String, AnyRef)]) = {
-    blueprint.foreach(component => {
-      addComponent(uid, component._1, component._2)
+  def addEntity(archFactory: () => List[Component]) = {
+    val archetype = archFactory()
+    val id = IDGenerator.uid
+
+    archetype.foreach(component => {
+      addComponent(id, component)
     })
-    println(components)
   }
 }
