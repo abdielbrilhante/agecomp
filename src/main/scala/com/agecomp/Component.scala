@@ -1,4 +1,9 @@
 package com.agecomp
 
-class Component(val id: Int) {
+class Component {
+  private var _id = -1
+
+  def id = _id
+
+  def id_= (value: Int):Unit = { _id = value }
 }
