@@ -1,5 +1,5 @@
 package com.agecomp
 
-abstract class Processor(val entityManager: EntityManager) {
+abstract class Processor(val scene: Scene) {
   def run
 }
