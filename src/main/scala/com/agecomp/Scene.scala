@@ -28,4 +28,17 @@ class Scene() {
       addComponent(id, component)
     })
   }
+
+  def container(className: String): ComponentMap = {
+    if (components.contains(className)) {
+      components(className)
+    }
+    else {
+      new ComponentMap
+    }
+  }
+}
+
+object Scene {
+  def apply() = new Scene
 }
