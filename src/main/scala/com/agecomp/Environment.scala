@@ -4,7 +4,7 @@ import akka.actor.Actor
 import akka.actor.Props
 
 abstract class Environment extends Actor {
-  var processors: List[Component] = Nil
+  var processors: List[Processor] = Nil
   val scene = Scene()
 
   def create(id: Int) = {
