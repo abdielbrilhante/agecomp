@@ -2,7 +2,7 @@ package com.agecomp
 
 import scala.collection.mutable.HashMap
 
-class EntityManager() {
+class Scene() {
   val components = new HashMap[String, ComponentMap]
 
   def addComponent(id: Int, component: Component) = {
