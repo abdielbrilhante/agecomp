@@ -2,7 +2,7 @@ package com.agecomp
 
 import akka.actor._
 
-class AgentRef extends Component {
-  var actor = None
+class AgentRef(val props: Props) extends Component {
+  var actor: ActorRef = null
   var flag = "Create"
 }
