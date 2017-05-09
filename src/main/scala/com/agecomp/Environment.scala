@@ -1,7 +1,6 @@
 package com.agecomp
 
-import akka.actor.Actor
-import akka.actor.Props
+import akka.actor._
 
 abstract class Environment extends Actor {
   var processors: List[Processor] = Nil
