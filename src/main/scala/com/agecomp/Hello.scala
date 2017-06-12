@@ -1,52 +1,34 @@
-package com.agecomp
+package com.agecomp.wanderer
 
-import scala.collection.mutable.HashMap
-import scala.reflect._
+import akka.actor.Actor
+import akka.actor.Props
+import akka.actor.PoisonPill
+import akka.actor.ActorSystem
+import scala.concurrent.duration._
 
-import akka.actor._
+import javafx.application.Application
+import javafx.event.ActionEvent
+import javafx.event.EventHandler
+import javafx.stage.Stage
 
-case object Cara
-case object Coroa
-
-class A { var a = 1 }
-object A {
-  def apply() = new A
-}
-
-class B extends A {
-  def send(actor: ActorRef) = actor ! Cara
-}
-object B {
-  def apply() = new B
-}
-
-class Ambiente extends Environment {
-  processors = List[Processor]()
-
-  def receive = {
-    case _ =>
-      println("Received!")
-      manage
-      self ! PoisonPill
-      context.system.terminate
+object Hello {
+  def main(args: Array[String]) {
+    Application.launch(classOf[Hello], args: _*)
   }
 }
 
-class C(val props: Props) {
-}
+class Hello extends Application {
 
-object Hello extends App {
-  val gen = () => Props[Ambiente]
+  val system = ActorSystem("Bakteria")
 
-  val actgen = (system: ActorSystem, props: () => Props) => {
-    system.actorOf(props(), name="Ambiente")
+  override def start(primaryStage: Stage) {
+    val environment = system.actorOf(Props(classOf[WandererEnvironment], 10.0, primaryStage))
+    environment ! "Tick"
+    primaryStage.show
   }
 
-  val p = Props[Ambiente]
-  val c = new C(p)
+  override def stop {
+    system.terminate
+  }
 
-  val system = ActorSystem("AgeCompSystem")
-  val amb = system.actorOf(c.props, name="Limas")
-
-  amb ! "Hi!"
 }
