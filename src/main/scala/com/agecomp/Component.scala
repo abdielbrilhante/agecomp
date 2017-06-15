@@ -7,3 +7,5 @@ class Component {
 
   def id_= (value: Int):Unit = { _id = value }
 }
+
+class InputComponent extends Component
