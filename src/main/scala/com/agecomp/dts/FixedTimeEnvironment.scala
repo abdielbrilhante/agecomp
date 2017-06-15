@@ -1,7 +1,7 @@
 package com.agecomp.dts
 import com.agecomp.Environment
 import com.agecomp.AgentRef
-import com.agecomp.grid.InputComponent
+import com.agecomp.InputComponent
 
 import scala.concurrent.duration._
 import scala.language.postfixOps
