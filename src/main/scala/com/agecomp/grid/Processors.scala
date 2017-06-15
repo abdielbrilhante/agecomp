@@ -21,25 +21,6 @@ class Grid(val rows: Int, val cols: Int) {
   def count: Int = rows*cols
 }
 
-class Factory(sc: Scene) extends Processor(sc) {
-  val bacteria = () => List[Component](
-    new Body(), new JFXComponent(new Circle(8, Color.RED)), new AgentRef(Props[Dumbo])
-  )
-  val bacteria2 = () => List[Component](
-    new Body(), new JFXComponent(new Circle(8, Color.INDIGO)), new AgentRef(Props[Dumbo])
-  )
-
-  var count = 0
-
-  override def run() {
-    if (count < 1) {
-      scene.addEntity(bacteria)
-      scene.addEntity(bacteria2)
-    }
-    count += 1
-  }
-}
-
 class MovementProcessor(sc: Scene) extends Processor(sc) {
   override def run() {
     val agents = scene.container("com.agecomp.grid.MovementInput")
@@ -74,6 +55,7 @@ class PhysicsProcessor(sc: Scene, val grid: Grid) extends Processor(sc) {
 
       if (dx > -1 && dx < grid.cols && dy > -1 && dy < grid.rows) {
         body.position = (dx, dy)
+        // if there is another body in that position, COLLISION
       }
 
       body.heading = (0, 0)
