@@ -37,6 +37,20 @@ class Scene() {
       new ComponentMap
     }
   }
+
+  def removeComponent(id: Int, container: ComponentMap) = {
+    var component = container(id)
+    component.destroy
+    container.remove(id)
+  }
+
+  def removeEntity(id: Int) = {
+    for ((className, map) <- components) {
+      if (map.contains(id)) {
+        removeComponent(id, map)
+      }
+    }
+  }
 }
 
 object Scene {
