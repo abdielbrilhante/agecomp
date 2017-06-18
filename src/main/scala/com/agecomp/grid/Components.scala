@@ -18,7 +18,9 @@ class CollisionComponent extends Component {
 }
 
 class JFXComponent(val node: Shape) extends Component {
-
+  def destroy = {
+    node.getParent.getChildren.remove(node)
+  }
 }
 
 class Dumbo extends Actor {
