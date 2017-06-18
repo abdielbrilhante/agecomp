@@ -1,16 +1,20 @@
 package com.agecomp.grid
 
 import com.agecomp.Component
+import com.agecomp.InputComponent
 import javafx.scene.shape.Shape
 import javafx.scene.Node
 import akka.actor._
 
-class InputComponent extends Component
 class MovementInput(var direction: String) extends InputComponent
 
 class Body extends Component {
   var position: Vec2 = (10, 10)
   var heading: Vec2 = (0, 0)
+}
+
+class CollisionComponent extends Component {
+  var other = ""
 }
 
 class JFXComponent(val node: Shape) extends Component {
