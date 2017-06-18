@@ -7,7 +7,7 @@ abstract class Component {
 
   def id_= (value: Int):Unit = { _id = value }
 
-  def destroy
+  def destroy = {}
 }
 
 class InputComponent extends Component
