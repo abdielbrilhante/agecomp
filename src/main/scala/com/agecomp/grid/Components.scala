@@ -4,6 +4,7 @@ import com.agecomp.Component
 import com.agecomp.InputComponent
 import javafx.scene.shape.Shape
 import javafx.scene.Node
+import javafx.scene.layout.StackPane
 import akka.actor._
 
 class MovementInput(var direction: String) extends InputComponent
@@ -18,8 +19,8 @@ class CollisionComponent extends Component {
 }
 
 class JFXComponent(val node: Shape) extends Component {
-  def destroy = {
-    node.getParent.getChildren.remove(node)
+  override def destroy = {
+    node.getParent.asInstanceOf[StackPane].getChildren.remove(node)
   }
 }
 
