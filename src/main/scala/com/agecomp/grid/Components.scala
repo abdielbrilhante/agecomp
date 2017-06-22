@@ -19,7 +19,7 @@ class CollisionComponent extends Component {
   var other = ""
 }
 
-class JFXComponent(val node: Shape) extends Component {
+class JFXComponent(val node: Node) extends Component {
   override def destroy = {
     Platform.runLater(() => {
       node.getParent.asInstanceOf[StackPane].getChildren.remove(node)

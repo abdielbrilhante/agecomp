@@ -11,7 +11,7 @@ import javafx.scene.layout.TilePane
 import javafx.scene.paint.Color
 import javafx.scene.shape.Rectangle
 import javafx.scene.shape.Circle
-import javafx.scene.shape.Shape
+import javafx.scene.Node
 import javafx.scene.layout.Pane
 import javafx.scene.layout.StackPane
 
@@ -89,14 +89,14 @@ class JFXProcessor(sc: Scene, val grid: Grid, val stage: Stage) extends Processo
 
   // TilePane -> Pane -> Rectangle -> (food -> bacteria)
 
-  def translate(shape: Shape, position: Vec2) {
+  def translate(node: Node, position: Vec2) {
     val (x, y) = position
     val index = x + y*grid.cols
 
     Platform.runLater(() => {
       val pane = root.getChildren.get(index).asInstanceOf[Pane]
-      if (shape.getParent != pane) {
-        pane.getChildren.add(shape)
+      if (node.getParent != pane) {
+        pane.getChildren.add(node)
       }
     })
   }
