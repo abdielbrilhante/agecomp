@@ -20,6 +20,7 @@ object Hello {
 class Hello extends Application {
 
   val system = ActorSystem("Bakteria")
+        // if there is another body in that position, COLLISION
 
   override def start(primaryStage: Stage) {
     val environment = system.actorOf(Props(classOf[WandererEnvironment], 10.0, primaryStage))
