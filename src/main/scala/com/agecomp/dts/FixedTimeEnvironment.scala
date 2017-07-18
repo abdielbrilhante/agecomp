@@ -11,17 +11,15 @@ import javafx.stage.Stage
 class FixedTimeEnvironment(val fps: Double, stage: Stage) extends Environment {
   import context._
 
+  def sendPerceptions() = {}
+
   def timestep() {
     context.system.scheduler.scheduleOnce(1000/fps millis, self, "Tick")
     manage
     processors.foreach(p => p.run)
     val agents = scene.container("com.agecomp.AgentRef")
-    for ((id, component) <- agents) {
-      val agent = component.asInstanceOf[AgentRef]
-      if (agent.actor != null) {
-        agent.actor ! "qual"
-      }
-    }
+
+    sendPerceptions()
   }
 
   def cache(m: InputComponent, name: String) {
