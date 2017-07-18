@@ -12,5 +12,7 @@ abstract class Component {
 
 class InputComponent extends Component
 
+class OutputComponent extends Component
+
 class EntityLabel(val label: String) extends Component {
 }
