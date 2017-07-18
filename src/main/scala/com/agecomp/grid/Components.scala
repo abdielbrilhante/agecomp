@@ -29,13 +29,13 @@ class VisionComponent() extends OutputComponent {
       output.put("Up", "Empty")
     }
     if (!output.contains("Down")) {
-      output.put("Up", "Empty")
+      output.put("Down", "Empty")
     }
     if (!output.contains("Left")) {
-      output.put("Up", "Empty")
+      output.put("Left", "Empty")
     }
     if (!output.contains("Right")) {
-      output.put("Up", "Empty")
+      output.put("Right", "Empty")
     }
   }
 
