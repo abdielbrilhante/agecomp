@@ -1,6 +1,7 @@
 package com.agecomp.grid
 
 import com.agecomp.Component
+import com.agecomp.EntityLabel
 import com.agecomp.Processor
 import com.agecomp.Scene
 import com.agecomp.AgentRef
@@ -8,6 +9,7 @@ import com.agecomp.AgentRef
 import javafx.stage.Stage
 import javafx.application.Platform
 import javafx.scene.layout.TilePane
+import javafx.scene.layout.VBox
 import javafx.scene.paint.Color
 import javafx.scene.shape.Rectangle
 import javafx.scene.shape.Circle
@@ -41,6 +43,42 @@ class MovementProcessor(sc: Scene) extends Processor(sc) {
   }
 }
 
+class VisionProcessor(sc: Scene, val grid: Grid) extends Processor(sc) {
+  override def run() {
+    val visionComponents = scene.container("com.agecomp.grid.VisionComponent")
+    val outputs = scene.container("com.agecomp.OutputComponent")
+    val bodies = scene.container("com.agecomp.grid.Body")
+    val labels = scene.container("com.agecomp.EntityLabel")
+
+    for ((id, component) <- visionComponents) {
+      val output = component.asInstanceOf[VisionComponent]
+      val (ax, ay) = bodies(id).asInstanceOf[Body].position
+
+      output.clear()
+      for ((bodyId, bodyComp) <- bodies) {
+        val (bx, by) = bodies(bodyId).asInstanceOf[Body].position
+        val label = labels(bodyId).asInstanceOf[EntityLabel].label
+
+        if ((ay - by) == 1) {
+          output.addOutput("Up", label)
+        }
+        if ((by - ay) == 1) {
+          output.addOutput("Down", label)
+        }
+        if ((ax - bx) == 1) {
+          output.addOutput("Right", label)
+        }
+        if ((bx - ax) == 1) {
+          output.addOutput("Left", label)
+        }
+      }
+
+      output.fill()
+      outputs(id) = output
+    }
+  }
+}
+
 class PhysicsProcessor(sc: Scene, val grid: Grid) extends Processor(sc) {
   override def run() {
     val bodies = scene.container("com.agecomp.grid.Body")
@@ -65,8 +103,10 @@ class PhysicsProcessor(sc: Scene, val grid: Grid) extends Processor(sc) {
 
 class JFXProcessor(sc: Scene, val grid: Grid, val stage: Stage) extends Processor(sc) {
   val root = new TilePane
-  root.setHgap(1)
-  root.setVgap(1)
+  root.setHgap(0)
+  root.setVgap(0)
+  root.setPrefColumns(grid.cols)
+  root.setPrefRows(grid.rows)
 
   Platform.runLater(() => {
     for (index <- 1 to grid.count) {
@@ -83,8 +123,8 @@ class JFXProcessor(sc: Scene, val grid: Grid, val stage: Stage) extends Processo
       root.getChildren.add(pane)
       pane.getChildren.add(rect)
     }
-    stage.setTitle("AgeComp JFX Environment")
-    stage.setScene(new javafx.scene.Scene(root, grid.cols*25 - 1, grid.rows*25 - 1))
+    stage.getScene.getRoot.asInstanceOf[VBox].getChildren.add(root)
+    stage.sizeToScene()
   })
 
   // TilePane -> Pane -> Rectangle -> (food -> bacteria)
