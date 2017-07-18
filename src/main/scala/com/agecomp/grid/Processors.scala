@@ -59,21 +59,22 @@ class VisionProcessor(sc: Scene, val grid: Grid) extends Processor(sc) {
         val (bx, by) = bodies(bodyId).asInstanceOf[Body].position
         val label = labels(bodyId).asInstanceOf[EntityLabel].label
 
-        if ((ay - by) == 1) {
+        if ((ax == bx) && (ay - by) == 1) {
           output.addOutput("Up", label)
         }
-        if ((by - ay) == 1) {
+        if ((ax == bx) && (by - ay) == 1) {
           output.addOutput("Down", label)
         }
-        if ((ax - bx) == 1) {
-          output.addOutput("Right", label)
-        }
-        if ((bx - ax) == 1) {
+        if ((ay == by) && (ax - bx) == 1) {
           output.addOutput("Left", label)
+        }
+        if ((ay == by) && (bx - ax) == 1) {
+          output.addOutput("Right", label)
         }
       }
 
       output.fill()
+      // println(output.output)
       outputs(id) = output
     }
   }
