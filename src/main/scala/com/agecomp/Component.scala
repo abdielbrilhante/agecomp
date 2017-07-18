@@ -14,5 +14,6 @@ class InputComponent extends Component
 
 class OutputComponent extends Component
 
-class EntityLabel(val label: String) extends Component {
+class EntityLabel(val label: String, var unique: String = "") extends Component {
+  if (unique == "") unique = label
 }
