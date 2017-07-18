@@ -5,6 +5,7 @@ import com.agecomp.EntityLabel
 import com.agecomp.Processor
 import com.agecomp.Scene
 import com.agecomp.AgentRef
+import com.agecomp.energy._
 
 import javafx.stage.Stage
 import javafx.application.Platform
@@ -83,6 +84,7 @@ class VisionProcessor(sc: Scene, val grid: Grid) extends Processor(sc) {
 class PhysicsProcessor(sc: Scene, val grid: Grid) extends Processor(sc) {
   override def run() {
     val bodies = scene.container("com.agecomp.grid.Body")
+    val levels = scene.container("com.agecomp.energy.EnergyComponent")
 
     for ((id, component) <- bodies) {
       val body = component.asInstanceOf[Body]
@@ -93,8 +95,11 @@ class PhysicsProcessor(sc: Scene, val grid: Grid) extends Processor(sc) {
       val dy = py + hy
 
       if (dx > -1 && dx < grid.cols && dy > -1 && dy < grid.rows) {
+        if (body.position != (dx, dy)) {
+          levels(id).asInstanceOf[EnergyComponent].value -= 0.1
+        }
         body.position = (dx, dy)
-        // if there is another body in that position, COLLISION
+
       }
 
       body.heading = (0, 0)
