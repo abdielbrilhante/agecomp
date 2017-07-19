@@ -13,10 +13,13 @@ class FixedTimeEnvironment(val fps: Double, stage: Stage) extends Environment {
 
   def sendPerceptions() = {}
 
+  var step = 0
+
   def timestep() {
     context.system.scheduler.scheduleOnce(1000/fps millis, self, "Tick")
     manage
-    processors.foreach(p => p.run)
+    processors.foreach(p => p.run(step))
+    step += 1
     val agents = scene.container("com.agecomp.AgentRef")
 
     sendPerceptions()

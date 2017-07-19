@@ -25,7 +25,7 @@ class Grid(val rows: Int, val cols: Int) {
 }
 
 class MovementProcessor(sc: Scene) extends Processor(sc) {
-  override def run() {
+  override def run(step: Int) {
     val agents = scene.container("com.agecomp.grid.MovementInput")
     val bodies = scene.container("com.agecomp.grid.Body")
 
@@ -45,7 +45,7 @@ class MovementProcessor(sc: Scene) extends Processor(sc) {
 }
 
 class VisionProcessor(sc: Scene, val grid: Grid) extends Processor(sc) {
-  override def run() {
+  override def run(step: Int) {
     val visionComponents = scene.container("com.agecomp.grid.VisionComponent")
     val outputs = scene.container("com.agecomp.OutputComponent")
     val bodies = scene.container("com.agecomp.grid.Body")
@@ -82,7 +82,7 @@ class VisionProcessor(sc: Scene, val grid: Grid) extends Processor(sc) {
 }
 
 class PhysicsProcessor(sc: Scene, val grid: Grid) extends Processor(sc) {
-  override def run() {
+  override def run(step: Int) {
     val bodies = scene.container("com.agecomp.grid.Body")
     val levels = scene.container("com.agecomp.energy.EnergyComponent")
 
@@ -114,24 +114,26 @@ class JFXProcessor(sc: Scene, val grid: Grid, val stage: Stage) extends Processo
   root.setPrefColumns(grid.cols)
   root.setPrefRows(grid.rows)
 
-  Platform.runLater(() => {
-    for (index <- 1 to grid.count) {
-      val pane = new StackPane
-      val rect = new Rectangle(24, 24)
+  def init = {
+    Platform.runLater(() => {
+      for (index <- 1 to grid.count) {
+        val pane = new StackPane
+        val rect = new Rectangle(24, 24)
 
-      if (index % 2 == 0) {
-        rect.setFill(Color.color(1, 1, 1))
-      }
-      else {
-        rect.setFill(Color.color(0.9, 0.925, 0.95))
-      }
+        if (index % 2 == 0) {
+          rect.setFill(Color.color(1, 1, 1))
+        }
+        else {
+          rect.setFill(Color.color(0.9, 0.925, 0.95))
+        }
 
-      root.getChildren.add(pane)
-      pane.getChildren.add(rect)
-    }
-    stage.getScene.getRoot.asInstanceOf[VBox].getChildren.add(root)
-    stage.sizeToScene()
-  })
+        root.getChildren.add(pane)
+        pane.getChildren.add(rect)
+      }
+      stage.getScene.getRoot.asInstanceOf[VBox].getChildren.add(root)
+      stage.sizeToScene()
+    })
+  }
 
   // TilePane -> Pane -> Rectangle -> (food -> bacteria)
 
@@ -147,7 +149,11 @@ class JFXProcessor(sc: Scene, val grid: Grid, val stage: Stage) extends Processo
     })
   }
 
-  override def run() {
+  override def run(step: Int) {
+    if (step == 0) {
+      init
+    }
+
     val bodies = scene.container("com.agecomp.grid.Body")
     val jfxc = scene.container("com.agecomp.grid.JFXComponent")
 
