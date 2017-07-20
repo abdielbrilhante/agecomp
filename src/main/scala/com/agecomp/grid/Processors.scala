@@ -2,6 +2,7 @@ package com.agecomp.grid
 
 import com.agecomp.Component
 import com.agecomp.EntityLabel
+import com.agecomp.energy.EnergyComponent
 import com.agecomp.Processor
 import com.agecomp.Scene
 import com.agecomp.AgentRef
@@ -50,6 +51,7 @@ class VisionProcessor(sc: Scene, val grid: Grid) extends Processor(sc) {
     val outputs = scene.container("com.agecomp.OutputComponent")
     val bodies = scene.container("com.agecomp.grid.Body")
     val labels = scene.container("com.agecomp.EntityLabel")
+    val levels = scene.container("com.agecomp.energy.EnergyComponent")
 
     for ((id, component) <- visionComponents) {
       val output = component.asInstanceOf[VisionComponent]
@@ -87,22 +89,24 @@ class PhysicsProcessor(sc: Scene, val grid: Grid) extends Processor(sc) {
     val levels = scene.container("com.agecomp.energy.EnergyComponent")
 
     for ((id, component) <- bodies) {
-      val body = component.asInstanceOf[Body]
-      val (px, py) = body.position
-      val (hx, hy) = body.heading
+      if (levels(id).asInstanceOf[EnergyComponent].value > 0) {
+        val body = component.asInstanceOf[Body]
+        val (px, py) = body.position
+        val (hx, hy) = body.heading
 
-      val dx = px + hx
-      val dy = py + hy
+        val dx = px + hx
+        val dy = py + hy
 
-      if (dx > -1 && dx < grid.cols && dy > -1 && dy < grid.rows) {
-        if (body.position != (dx, dy)) {
-          levels(id).asInstanceOf[EnergyComponent].value -= 0.1
+        if (dx > -1 && dx < grid.cols && dy > -1 && dy < grid.rows) {
+          if (body.position != (dx, dy)) {
+            levels(id).asInstanceOf[EnergyComponent].value -= 0.1
+          }
+          body.position = (dx, dy)
+
         }
-        body.position = (dx, dy)
 
+        body.heading = (0, 0)
       }
-
-      body.heading = (0, 0)
     }
   }
 }
@@ -131,7 +135,7 @@ class JFXProcessor(sc: Scene, val grid: Grid, val stage: Stage) extends Processo
         pane.getChildren.add(rect)
       }
       stage.getScene.getRoot.asInstanceOf[VBox].getChildren.add(root)
-      stage.sizeToScene()
+      // stage.sizeToScene()
     })
   }
 
