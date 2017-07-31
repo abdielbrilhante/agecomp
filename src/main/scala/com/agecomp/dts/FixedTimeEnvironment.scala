@@ -16,7 +16,12 @@ class FixedTimeEnvironment(val fps: Double, stage: Stage) extends Environment {
   var step = 0
 
   def timestep() {
-    context.system.scheduler.scheduleOnce(1000/fps millis, self, "Tick")
+    var period = 1000/fps
+    if (step == 0) {
+      period = 5000
+    }
+
+    context.system.scheduler.scheduleOnce(period millis, self, "Tick")
     manage
     processors.foreach(p => p.run(step))
     step += 1

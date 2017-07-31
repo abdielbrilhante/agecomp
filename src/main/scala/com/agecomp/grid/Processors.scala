@@ -128,14 +128,14 @@ class JFXProcessor(sc: Scene, val grid: Grid, val stage: Stage) extends Processo
           rect.setFill(Color.color(1, 1, 1))
         }
         else {
-          rect.setFill(Color.color(0.9, 0.925, 0.95))
+          rect.setFill(Color.color(0.975, 0.975, 0.975))
         }
 
         root.getChildren.add(pane)
         pane.getChildren.add(rect)
       }
       stage.getScene.getRoot.asInstanceOf[VBox].getChildren.add(root)
-      // stage.sizeToScene()
+      stage.sizeToScene()
     })
   }
 
